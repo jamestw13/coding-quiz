@@ -1,0 +1,1 @@
+const QUIZ_ARRAY = [{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""},{question: "",answer: ""}];
