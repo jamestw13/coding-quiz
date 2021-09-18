@@ -1,9 +1,13 @@
 const QUIZ_ARRAY = [{question: "Question 1",answer: ["true", "false"]},{question: "Question 2",answer: ["true", "false1", "false2"]},{question: "Question 3",answer: ["true", "false1","false2","false3"]}]
 let mainContent = document.getElementById("page-content");
-let timeScore = 100;
+let timerEl = document.getElementById("timer");
+let timer = 0;
+let score = 0;
 let questionNumber = 0 ;
+let startTimer;
 
 let correctAnswer = function () {
+  score = timer;
   let correctMsg = document.createElement("h3");
   correctMsg.textContent = "Correct!"
   mainContent.appendChild(correctMsg)
@@ -13,13 +17,21 @@ let correctAnswer = function () {
   }
   
   let incorrectAnswer = function () {
-    
-    createQuestionPage(QUIZ_ARRAY[questionNumber]);
+    timer = timer - 5;
+    score = timer;
+    let incorrectMsg = document.createElement("h3");
+    incorrectMsg.textContent = "Incorrect!"
+    mainContent.appendChild(incorrectMsg)
+    setTimeout(
+      () => {createQuestionPage(QUIZ_ARRAY[questionNumber])}, 
+      1500);
   }
   
   let resultsPage = function() {
+    clearInterval(startTimer)
+    timerEl.textContent = "";
     let resultsText = document.createElement("h2");
-    resultsText.textContent = "Done with a score of " + timeScore;
+    resultsText.textContent = "Done with a score of " + score;
 
     mainContent.appendChild(resultsText);
   }
@@ -59,9 +71,20 @@ let correctAnswer = function () {
     }
   }
   
+  
+  let runTime = function () {
+    timer--;
+    timerEl.textContent = "Timer " + timer
+  }
+  
   let runQuiz = function() {
     
     //TODO: Start Timer Countdown
+    timer = 100
+    startTimer = setInterval(runTime, 1000);
+    timerEl.textContent = "Timer " + timer
+
+
     
     createQuestionPage(QUIZ_ARRAY[questionNumber]);
     
