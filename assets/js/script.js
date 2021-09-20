@@ -6,8 +6,8 @@ const QUIZ_ARRAY = [
     question: "JavaScript is a _____-side programming language.", 
     answer: ["Both","Client","Server", "None"]
   },{
-    question: "Which of the following will write the message 'Hello DataFlair!' in an alert box?",
-    answer: ["alert('Hello DataFlair!');", "alertBox('Hello DataFlair!');", "alert(Hello DataFlair!);", "msgAlert('Hello DataFlair!');"]
+    question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
+    answer: ["alert('Hello Sunshine!');", "alertBox('Hello Sunshine!');", "alert(Hello Sunshine!);", "msgAlert('Hello Sunshine!');"]
   },{
     question: "How do you find the minimum of x and y using JavaScript?",
     answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
@@ -31,7 +31,7 @@ const QUIZ_ARRAY = [
     answer: ["TypeError", "ReferenceError", "undefined", "1"]
   },{
     question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
-    answer: ["document.getElementById(“test”).innerHTML = “Hello DataFlair!”;", "document.getElementsById(“test”).innerHTML = “Hello DataFlair!”;", "document.getElementById(test).innerHTML = “Hello DataFlair!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello DataFlair!”;"]
+    answer: ["document.getElementById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementById(test).innerHTML = “Hello Sunshine!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;"]
   }
 ];
 
@@ -43,31 +43,45 @@ let score = 0;
 let questionNumber = 0 ;
 let startTimer;
 
-// When user answers correctly
-let correctAnswer = function () {
+// Answer handler
+let answer = function (result) {
+  if (result === "incorrect") {
+    timer = timer - 10;
+  }
   score = timer;
-  footer.innerHTML = "Correct!"
+  footer.innerHTML = result
   setTimeout( () => {footer.innerHTML = ""},   1000);
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 
-// When user answers incorrectly
-let incorrectAnswer = function () {
-  timer = timer - 5;
-  score = timer;
-  footer.innerHTML = "Incorrect"
-  setTimeout( () => {footer.innerHTML = ""},   1000);
-  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+// Fill main section with high scores
+let createHighScoresPage = function() {
+
 }
 
-// Fill main section with score results
-let resultsPage = function() {
+// Fill main section with quiz results
+let createResultsPage = function() {
   clearInterval(startTimer)
   timerEl.textContent = "";
-  let resultsText = document.createElement("h2");
-  resultsText.textContent = "Done with a score of " + score;
+
+  let resultsPage = document.createElement("div");
+
+  let resultsH1 = document.createElement("h1");
+  resultsH1.textContent = "All done!";
+
+  let resultsH2 = document.createElement("h2");
+  resultsH2.textContent = "Your final score is " + score + ".";
   
-  mainContent.appendChild(resultsText);
+  let inputLabel = document.createElement("label");
+inputLabel.setAttribute("");
+  
+let initialsInput = document.createElement("input");
+initialsInput.setAttribute("")
+
+let inputButton = document.createElement("button");
+inputButton.addEventListener("click", createHighScoresPage());
+
+  mainContent.appendChild(resultsPage);
 }
 
 // Fill main section with next question in array
@@ -78,18 +92,19 @@ let createQuestionPage = function (questionObject) {
     mainContent.removeChild(mainContent.firstChild);
   }
   
-  // Check if there is a question left in the array - if not go to results
+  // Check if there is a question left in the array
+  
   if (!questionObject || timer === 0) {
-    resultsPage();
+  //    if not, show results
+    createResultsPage();
   }
   
-
   else {
-    // Create question page
+  // if so, create a new question page
     let questionPage = document.createElement("div");
     
     let questionText = document.createElement("h2");
-    questionText.textContent = questionObject.question;
+    questionText.innerHTML = "<pre>" + questionObject.question + "</pre>";
     
     questionPage.appendChild(questionText);
     // TODO Randomize question order (keep track of 0 index question)
@@ -98,9 +113,9 @@ let createQuestionPage = function (questionObject) {
       answerButton.textContent = questionObject.answer[j];
       answerButton.addEventListener("click", function () {
         if (answerButton.textContent === questionObject.answer[0]){
-          correctAnswer();
+          answer("Correct!");
         } else {
-          incorrectAnswer();
+          answer("Incorrect!");
         }
       });
       
@@ -123,26 +138,31 @@ let runQuiz = function() {
   
   //Start Timer Countdown
   timer = 100
-  startTimer = setInterval(runTime, 1000);
   timerEl.textContent = "Timer " + timer
+  startTimer = setInterval(runTime, 1000);
     
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 
 // Fill the main section with the welcome and start quiz section
-let initiateContent = function () {
-  let welcomePage = document.createElement("div");
+let createStartPage = function () {
+  let startPage = document.createElement("div");
   
-  let welcomeText = document.createElement("h2");
-  welcomeText.textContent = "Press the button to start the quiz."
+  let startH1 = document.createElement("h1");
+  startH1.textContent = "Coding Quiz Challenge"
+
+  let startH2 = document.createElement("h2");
+  startH2.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"
   
   let startButton = document.createElement("button");
+  startButton.textContent = "Start Quiz"
   startButton.addEventListener("click", runQuiz);
   
-  welcomePage.appendChild(welcomeText);
-  welcomePage.appendChild(startButton);
+  startPage.appendChild(startH1);
+  startPage.appendChild(startH2);
+  startPage.appendChild(startButton);
   
-  mainContent.appendChild(welcomePage);
+  mainContent.appendChild(startPage);
 }
 
-initiateContent();
+createStartPage();
