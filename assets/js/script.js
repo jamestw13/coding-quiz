@@ -1,4 +1,40 @@
-const QUIZ_ARRAY = [{question: "Question 1",answer: ["true", "false"]},{question: "Question 2",answer: ["true", "false1", "false2"]},{question: "Question 3",answer: ["true", "false1","false2","false3"]}]
+const QUIZ_ARRAY = [
+  {
+    question:"If you type the following code in the console window, what result will you get?\n3 > 2 > 1 === false;", 
+    answer: ["true", "false"]
+  }, {
+    question: "JavaScript is a _____-side programming language.", 
+    answer: ["Both","Client","Server", "None"]
+  },{
+    question: "Which of the following will write the message 'Hello DataFlair!' in an alert box?",
+    answer: ["alert('Hello DataFlair!');", "alertBox('Hello DataFlair!');", "alert(Hello DataFlair!);", "msgAlert('Hello DataFlair!');"]
+  },{
+    question: "How do you find the minimum of x and y using JavaScript?",
+    answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
+  },{
+    question: "Which of the following statements will throw an error?",
+    answer: ["var fun = function bar{ }", "var fun = function bar( ){ }", "function fun( ){ }"]
+  },{
+    question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
+    answer: ["Divisible by 10", "ReferenceError", "Not divisible by 10", "None of the above"]
+  },{
+    question: "Which JavaScript label catches all the values, except for the ones specified?",
+    answer: ["default", "catch", "label", "try"]
+  },{
+    question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
+    answer: ["if(x == 2)", "if(x 2)", "if(x = 2)", "if(x != 2 )"]
+  },{
+    question: "What will the code return?\nBoolean(3 < 7)",
+    answer: ["true", "false", "NaN", "SyntaxError"]
+  },{
+    question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
+    answer: ["TypeError", "ReferenceError", "undefined", "1"]
+  },{
+    question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
+    answer: ["document.getElementById(“test”).innerHTML = “Hello DataFlair!”;", "document.getElementsById(“test”).innerHTML = “Hello DataFlair!”;", "document.getElementById(test).innerHTML = “Hello DataFlair!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello DataFlair!”;"]
+  }
+];
+
 let mainContent = document.getElementById("page-content");
 let timerEl = document.getElementById("timer");
 let footer = document.getElementById("answer-result");
@@ -30,7 +66,6 @@ let correctAnswer = function () {
   let resultsPage = function() {
     clearInterval(startTimer)
     timerEl.textContent = "";
-    timer
     let resultsText = document.createElement("h2");
     resultsText.textContent = "Done with a score of " + score;
 
@@ -44,7 +79,7 @@ let correctAnswer = function () {
       mainContent.removeChild(mainContent.firstChild);
     }
     
-    if (!questionObject) {
+    if (!questionObject || timer === 0) {
       resultsPage();
     }
     
