@@ -43,105 +43,106 @@ let score = 0;
 let questionNumber = 0 ;
 let startTimer;
 
+// When user answers correctly
 let correctAnswer = function () {
   score = timer;
   footer.innerHTML = "Correct!"
-  setTimeout(
-    () => {footer.innerHTML = ""}, 
-    1000);
-    createQuestionPage(QUIZ_ARRAY[questionNumber]);
-  }
-  
-  let incorrectAnswer = function () {
-    timer = timer - 5;
-    score = timer;
-    let incorrectMsg = document.createElement("h3");
-    incorrectMsg.textContent = "Incorrect!"
-    mainContent.appendChild(incorrectMsg)
-    setTimeout(
-      () => {createQuestionPage(QUIZ_ARRAY[questionNumber])}, 
-      1500);
-  }
-  
-  let resultsPage = function() {
-    clearInterval(startTimer)
-    timerEl.textContent = "";
-    let resultsText = document.createElement("h2");
-    resultsText.textContent = "Done with a score of " + score;
+  setTimeout( () => {footer.innerHTML = ""},   1000);
+  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+}
 
-    mainContent.appendChild(resultsText);
+// When user answers incorrectly
+let incorrectAnswer = function () {
+  timer = timer - 5;
+  score = timer;
+  footer.innerHTML = "Incorrect"
+  setTimeout( () => {footer.innerHTML = ""},   1000);
+  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+}
+
+// Fill main section with score results
+let resultsPage = function() {
+  clearInterval(startTimer)
+  timerEl.textContent = "";
+  let resultsText = document.createElement("h2");
+  resultsText.textContent = "Done with a score of " + score;
+  
+  mainContent.appendChild(resultsText);
+}
+
+// Fill main section with next question in array
+let createQuestionPage = function (questionObject) {
+  
+  // Clear last page
+  while (mainContent.firstChild){
+    mainContent.removeChild(mainContent.firstChild);
   }
   
-  let createQuestionPage = function (questionObject) {
+  // Check if there is a question left in the array - if not go to results
+  if (!questionObject || timer === 0) {
+    resultsPage();
+  }
+  
+
+  else {
+    // Create question page
+    let questionPage = document.createElement("div");
     
-    // Clear last page
-    while (mainContent.firstChild){
-      mainContent.removeChild(mainContent.firstChild);
+    let questionText = document.createElement("h2");
+    questionText.textContent = questionObject.question;
+    
+    questionPage.appendChild(questionText);
+    // TODO Randomize question order (keep track of 0 index question)
+    for (var j = 0; j < questionObject.answer.length; j++) {
+      let answerButton = document.createElement("button");
+      answerButton.textContent = questionObject.answer[j];
+      answerButton.addEventListener("click", function () {
+        if (answerButton.textContent === questionObject.answer[0]){
+          correctAnswer();
+        } else {
+          incorrectAnswer();
+        }
+      });
+      
+      questionPage.appendChild(answerButton);
     }
     
-    if (!questionObject || timer === 0) {
-      resultsPage();
-    }
-    
-    else {
-      
-      
-      // Create question page
-      let questionPage = document.createElement("div");
-      
-      let questionText = document.createElement("h2");
-      questionText.textContent = questionObject.question;
-      
-      questionPage.appendChild(questionText);
-      // TODO Randomize question order (keep track of 0 index question)
-      for (var j = 0; j < questionObject.answer.length; j++) {
-        let answerButton = document.createElement("button");
-        answerButton.textContent = questionObject.answer[j];
-        answerButton.addEventListener("click", correctAnswer);
-        
-        questionPage.appendChild(answerButton);
-      }
-      
-      mainContent.appendChild(questionPage);
-      questionNumber++;
-    }
+    mainContent.appendChild(questionPage);
+    questionNumber++;
   }
-  
-  
-  let runTime = function () {
-    timer--;
-    timerEl.textContent = "Timer " + timer
-  }
-  
-  let runQuiz = function() {
-    
-    //TODO: Start Timer Countdown
-    timer = 100
-    startTimer = setInterval(runTime, 1000);
-    timerEl.textContent = "Timer " + timer
+}
 
+// Timer functionality
+let runTime = function () {
+  timer--;
+  timerEl.textContent = "Timer " + timer
+}
 
-    
-    createQuestionPage(QUIZ_ARRAY[questionNumber]);
-    
-    
-    
-  }
+// Begins the quiz
+let runQuiz = function() {
   
-  // Create and display invitation to start the quiz
-  let initiateContent = function () {
-    let welcomePage = document.createElement("div");
+  //Start Timer Countdown
+  timer = 100
+  startTimer = setInterval(runTime, 1000);
+  timerEl.textContent = "Timer " + timer
     
-    let welcomeText = document.createElement("h2");
-    welcomeText.textContent = "Press the button to start the quiz."
-    
-    let startButton = document.createElement("button");
-    startButton.addEventListener("click", runQuiz);
-    
-    welcomePage.appendChild(welcomeText);
-    welcomePage.appendChild(startButton);
-    
-    mainContent.appendChild(welcomePage);
-  }
+  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+}
+
+// Fill the main section with the welcome and start quiz section
+let initiateContent = function () {
+  let welcomePage = document.createElement("div");
   
-  initiateContent();
+  let welcomeText = document.createElement("h2");
+  welcomeText.textContent = "Press the button to start the quiz."
+  
+  let startButton = document.createElement("button");
+  startButton.addEventListener("click", runQuiz);
+  
+  welcomePage.appendChild(welcomeText);
+  welcomePage.appendChild(startButton);
+  
+  mainContent.appendChild(welcomePage);
+}
+
+initiateContent();
