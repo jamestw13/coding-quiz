@@ -5,43 +5,51 @@ const QUIZ_ARRAY = [
   }, {
     question: "JavaScript is a _____-side programming language.", 
     answer: ["Both","Client","Server", "None"]
-  },{
-    question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
-    answer: ["alert('Hello Sunshine!');", "alertBox('Hello Sunshine!');", "alert(Hello Sunshine!);", "msgAlert('Hello Sunshine!');"]
-  },{
-    question: "How do you find the minimum of x and y using JavaScript?",
-    answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
-  },{
-    question: "Which of the following statements will throw an error?",
-    answer: ["var fun = function bar{ }", "var fun = function bar( ){ }", "function fun( ){ }"]
-  },{
-    question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
-    answer: ["Divisible by 10", "ReferenceError", "Not divisible by 10", "None of the above"]
-  },{
-    question: "Which JavaScript label catches all the values, except for the ones specified?",
-    answer: ["default", "catch", "label", "try"]
-  },{
-    question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
-    answer: ["if(x == 2)", "if(x 2)", "if(x = 2)", "if(x != 2 )"]
-  },{
-    question: "What will the code return?\nBoolean(3 < 7)",
-    answer: ["true", "false", "NaN", "SyntaxError"]
-  },{
-    question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
-    answer: ["TypeError", "ReferenceError", "undefined", "1"]
-  },{
-    question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
-    answer: ["document.getElementById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementById(test).innerHTML = “Hello Sunshine!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;"]
+    // },{
+    //   question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
+    //   answer: ["alert('Hello Sunshine!');", "alertBox('Hello Sunshine!');", "alert(Hello Sunshine!);", "msgAlert('Hello Sunshine!');"]
+    // },{
+    //   question: "How do you find the minimum of x and y using JavaScript?",
+    //   answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
+    // },{
+    //   question: "Which of the following statements will throw an error?",
+    //   answer: ["var fun = function bar{ }", "var fun = function bar( ){ }", "function fun( ){ }"]
+    // },{
+    //   question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
+    //   answer: ["Divisible by 10", "ReferenceError", "Not divisible by 10", "None of the above"]
+    // },{
+    //   question: "Which JavaScript label catches all the values, except for the ones specified?",
+    //   answer: ["default", "catch", "label", "try"]
+    // },{
+    //   question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
+    //   answer: ["if(x == 2)", "if(x 2)", "if(x = 2)", "if(x != 2 )"]
+    // },{
+    //   question: "What will the code return?\nBoolean(3 < 7)",
+    //   answer: ["true", "false", "NaN", "SyntaxError"]
+    // },{
+    //   question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
+    //   answer: ["TypeError", "ReferenceError", "undefined", "1"]
+    // },{
+    //   question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
+    //   answer: ["document.getElementById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementById(test).innerHTML = “Hello Sunshine!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;"]
   }
 ];
 
 let mainContent = document.getElementById("page-content");
 let timerEl = document.getElementById("timer");
 let footer = document.getElementById("answer-result");
-let timer = 0;
-let score = 0;
-let questionNumber = 0 ;
-let startTimer;
+let timer, score, questionNumber = 0;
+let highScores = [];
+// let score = 0;
+// let questionNumber = 0 ;
+// let startTimer;
+
+// Clear mainContent
+let clearMainContent = function () {
+  while (mainContent.firstChild){
+    mainContent.removeChild(mainContent.firstChild);
+  }
+}
 
 // Answer handler
 let answer = function (result) {
@@ -56,51 +64,77 @@ let answer = function (result) {
 
 // Fill main section with high scores
 let createHighScoresPage = function() {
-
+  
+  // Clear mainContent
+  clearMainContent();
+  
+  let highScoresPage = document.createElement("div");
+  
+  
+  
+  mainContent.appendChild(highScoresPage);
 }
+
+// Add new score to localStorage
+let updateHighScores = function(initialsInput, score) {
+  let newScore = {"initials": initialsInput, "score": score};
+  highScores.push(newScore);
+  
+  highScores.sort((a, b) => parseInt(a.score) - parseInt(b.score));
+}
+
 
 // Fill main section with quiz results
 let createResultsPage = function() {
+  // Clear mainContent
+  clearMainContent();
+  
+  // Stop and hide
   clearInterval(startTimer)
   timerEl.textContent = "";
-
+  
+  // create page elements
   let resultsPage = document.createElement("div");
-
+  
   let resultsH1 = document.createElement("h1");
   resultsH1.textContent = "All done!";
-
+  
   let resultsH2 = document.createElement("h2");
   resultsH2.textContent = "Your final score is " + score + ".";
   
   let inputLabel = document.createElement("label");
-inputLabel.setAttribute("");
+  inputLabel.setAttribute("id", "input-label");
+  inputLabel.textContent = "Enter initials: "
   
-let initialsInput = document.createElement("input");
-initialsInput.setAttribute("")
-
-let inputButton = document.createElement("button");
-inputButton.addEventListener("click", createHighScoresPage());
-
+  let initialsInput = document.createElement("input");
+  initialsInput.setAttribute("id", "initials-input")
+  
+  let inputButton = document.createElement("button");
+  inputButton.addEventListener("click", function() {updateHighScores(initialsInput, score); createHighScoresPage()});
+  
+  resultsPage.appendChild(resultsH1);
+  resultsPage.appendChild(resultsH2);
+  resultsPage.appendChild(inputLabel);
+  resultsPage.appendChild(initialsInput);
+  resultsPage.appendChild(inputButton);
+  
+  
   mainContent.appendChild(resultsPage);
 }
 
 // Fill main section with next question in array
 let createQuestionPage = function (questionObject) {
   
-  // Clear last page
-  while (mainContent.firstChild){
-    mainContent.removeChild(mainContent.firstChild);
-  }
-  
   // Check if there is a question left in the array
-  
   if (!questionObject || timer === 0) {
-  //    if not, show results
+    //    if not, show results
     createResultsPage();
   }
   
   else {
-  // if so, create a new question page
+    // Clear mainContent
+    clearMainContent();    
+    // if so, create a new question page
     let questionPage = document.createElement("div");
     
     let questionText = document.createElement("h2");
@@ -140,17 +174,23 @@ let runQuiz = function() {
   timer = 100
   timerEl.textContent = "Timer " + timer
   startTimer = setInterval(runTime, 1000);
-    
+  
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 
 // Fill the main section with the welcome and start quiz section
 let createStartPage = function () {
+  // Clear mainContent
+  clearMainContent();
+  if (localStorage.getItem("highScores")){
+    highScores = localStorage.getItem("highScores");
+  }
+  
   let startPage = document.createElement("div");
   
   let startH1 = document.createElement("h1");
   startH1.textContent = "Coding Quiz Challenge"
-
+  
   let startH2 = document.createElement("h2");
   startH2.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"
   
