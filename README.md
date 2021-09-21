@@ -19,12 +19,13 @@ The purpose of this project is to create a timed quiz on JavaScript fundamentals
 - Safety
 - - The user will be asked for confirmation before clearing the high scores
 
-## Credit
+### Credit
 - Questions were taken and adapted from https://data-flair.training/blogs/javascript-quiz/
 - Shuffle algorithm was provided by https://javascript.info/task/shuffle
 
+## Links
 
-## [Click here to go to the live deployment](https://jamestw13.github.io/coding-quiz/)
+### [Click here to go to the live deployment](https://jamestw13.github.io/coding-quiz/)
 
 TODO:
 ![Screenshot](https://github.com/jamestw13/jamestw13.github.io/blob/main/coding-quiz.png)
