@@ -5,33 +5,33 @@ const QUIZ_ARRAY = [
   }, {
     question: "JavaScript is a _____-side programming language.", 
     answer: ["Both","Client","Server", "None"]
-    // },{
-    //   question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
-    //   answer: ["alert('Hello Sunshine!');", "alertBox('Hello Sunshine!');", "alert(Hello Sunshine!);", "msgAlert('Hello Sunshine!');"]
-    // },{
-    //   question: "How do you find the minimum of x and y using JavaScript?",
-    //   answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
-    // },{
-    //   question: "Which of the following statements will throw an error?",
-    //   answer: ["var fun = function bar{ }", "var fun = function bar( ){ }", "function fun( ){ }"]
-    // },{
-    //   question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
-    //   answer: ["Divisible by 10", "ReferenceError", "Not divisible by 10", "None of the above"]
-    // },{
-    //   question: "Which JavaScript label catches all the values, except for the ones specified?",
-    //   answer: ["default", "catch", "label", "try"]
-    // },{
-    //   question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
-    //   answer: ["if(x == 2)", "if(x 2)", "if(x = 2)", "if(x != 2 )"]
-    // },{
-    //   question: "What will the code return?\nBoolean(3 < 7)",
-    //   answer: ["true", "false", "NaN", "SyntaxError"]
-    // },{
-    //   question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
-    //   answer: ["TypeError", "ReferenceError", "undefined", "1"]
-    // },{
-    //   question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
-    //   answer: ["document.getElementById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementById(test).innerHTML = “Hello Sunshine!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;"]
+    },{
+      question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
+      answer: ["alert('Hello Sunshine!');", "alertBox('Hello Sunshine!');", "alert(Hello Sunshine!);", "msgAlert('Hello Sunshine!');"]
+    },{
+      question: "How do you find the minimum of x and y using JavaScript?",
+      answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
+    },{
+      question: "Which of the following statements will throw an error?",
+      answer: ["var fun = function bar{ }", "var fun = function bar( ){ }", "function fun( ){ }"]
+    },{
+      question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
+      answer: ["Divisible by 10", "ReferenceError", "Not divisible by 10", "None of the above"]
+    },{
+      question: "Which JavaScript label catches all the values, except for the ones specified?",
+      answer: ["default", "catch", "label", "try"]
+    },{
+      question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
+      answer: ["if(x == 2)", "if(x 2)", "if(x = 2)", "if(x != 2 )"]
+    },{
+      question: "What will the code return?\nBoolean(3 < 7)",
+      answer: ["true", "false", "NaN", "SyntaxError"]
+    },{
+      question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
+      answer: ["TypeError", "ReferenceError", "undefined", "1"]
+    },{
+      question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
+      answer: ["document.getElementById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementById(test).innerHTML = “Hello Sunshine!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;"]
   }
 ];
 
@@ -61,6 +61,7 @@ let answer = function (result) {
   setTimeout( () => {footer.innerHTML = ""},   1000);
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
+
 
 // Fill main section with high scores
 let createHighScoresPage = function() {
@@ -173,27 +174,37 @@ let createResultsPage = function() {
 let createQuestionPage = function (questionObject) {
   
   // Check if there is a question left in the array
+  // if not, show results
   if (!questionObject || timer === 0) {
-    //    if not, show results
     createResultsPage();
   }
   
+  // if so, create a new question page
   else {
+    
     // Clear mainContent
     clearMainContent();    
-    // if so, create a new question page
+    
     let questionPage = document.createElement("div");
     
     let questionText = document.createElement("h2");
     questionText.innerHTML = "<pre>" + questionObject.question + "</pre>";
     
     questionPage.appendChild(questionText);
-    // TODO Randomize question order (keep track of 0 index question)
-    for (var j = 0; j < questionObject.answer.length; j++) {
+
+    // shuffle answer order
+    let baseAnswers = questionObject.answer;
+    let shuffledAnswers = baseAnswers;
+    shuffle(shuffledAnswers)
+    console.dir(baseAnswers);
+    console.dir(shuffledAnswers);
+
+    for (let i = 0; i < shuffledAnswers.length; i++) {
       let answerButton = document.createElement("button");
-      answerButton.textContent = questionObject.answer[j];
+      answerButton.textContent = shuffledAnswers[i];
+
       answerButton.addEventListener("click", function () {
-        if (answerButton.textContent === questionObject.answer[0]){
+        if (answerButton.textContent === baseAnswers[0]){
           answer("Correct!");
         } else {
           answer("Incorrect!");
@@ -214,15 +225,36 @@ let runTime = function () {
   timerEl.textContent = "Timer " + timer
 }
 
+// Array shuffler from https://javascript.info/task/shuffle
+function shuffle(array) {
+  // debugger;
+  shuffledArray = array;
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+
+    // swap elements array[i] and array[j]
+    // we use "destructuring assignment" syntax to achieve that
+    // you'll find more details about that syntax in later chapters
+    // same can be written as:
+    // let t = array[i]; array[i] = array[j]; array[j] = t
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+}
+
 // Begins the quiz
 let runQuiz = function() {
-  
+  questionNumber = 0;
+
   //Start Timer Countdown
   timer = 100
   timerEl.textContent = "Timer " + timer
   startTimer = setInterval(runTime, 1000);
+
+  // Randomize question array
+  let randomizedQuestions = shuffle(QUIZ_ARRAY);
   
-  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+  createQuestionPage(randomizedQuestions[questionNumber]);
 }
 
 // Fill the main section with the welcome and start quiz section
@@ -230,7 +262,7 @@ let createStartPage = function () {
   // Clear mainContent
   clearMainContent();
 
-  questionNumber = 0;
+  
     
   let startPage = document.createElement("div");
   
