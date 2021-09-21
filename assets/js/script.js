@@ -1,3 +1,13 @@
+/* 
+  JavaScript Coding Quiz
+  Module 4 Challenge Assignment: Web APIs
+  
+  Author: TJ James
+*/
+
+/* Start Global Variables */
+
+// Questions taken and adapted from https://data-flair.training/blogs/javascript-quiz/
 const QUIZ_ARRAY = [
   {
     question:"If you type the following code in the console window, what result will you get?\n3 > 2 > 1 === false;", 
@@ -90,15 +100,17 @@ const QUIZ_ARRAY = [
 
 let mainContent = document.getElementById("page-content");
 let timerEl = document.getElementById("timer");
-let footer = document.getElementById("answer-result");
-let timer, score, questionNumber = 0;
+let resultEl = document.getElementById("answer-result");
+let timeScore, questionNumber = 0;
 let highScores = [];
-// let score = 0;
-// let questionNumber = 0 ;
 let startTimer;
 
+/* End Global Variables */
+
+/* Start Utility Functions */
+
 // Clear mainContent
-let clearMainContent = function () {
+let clearDisplayArea = function () {
   while (mainContent.firstChild){
     mainContent.removeChild(mainContent.firstChild);
   }
@@ -108,25 +120,83 @@ let clearMainContent = function () {
 let answer = function (result) {
   
   if (result === "Incorrect!") {
-    timer = timer - 10;
+    timeScore = timeScore - 10;
   }
-  score = timer;
-  footer.innerHTML = result
-  setTimeout( () => {footer.innerHTML = ""},   1000);
-
-  if (timer <= 0) {
+  
+  resultEl.innerHTML = result
+  setTimeout( () => {resultEl.innerHTML = ""},   1000);
+  
+  if (timeScore <= 0) {
     createResultsPage();
   }
-
+  
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 
+// Add new score to localStorage
+let updateHighScores = function(initialsInput, score) {
+  
+  let newScore = {"initials": initialsInput, "score": score};
+  
+  highScores.push(newScore);
+  
+  highScores.sort((a, b) => parseInt(b.score) - parseInt(a.score));
+  
+  while (highScores.length > 10) {
+    highScores.pop();
+  }
+  
+  localStorage.setItem("codingQuizHighScores", JSON.stringify(highScores))
+}
 
-// Fill main section with high scores
+// Timer functionality
+let runTime = function () {
+  timeScore--;
+  timerEl.textContent = "Timer " + timeScore
+  
+  if (timeScore <= 0) {
+    clearInterval(runTime);
+    createResultsPage()
+  }
+}
+
+// Array shuffler from https://javascript.info/task/shuffle
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+    
+    // swap elements array[i] and array[j]
+    // we use "destructuring assignment" syntax to achieve that
+    // you'll find more details about that syntax in later chapters
+    // same can be written as:
+    // let t = array[i]; array[i] = array[j]; array[j] = t
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// Begins the quiz
+let runQuiz = function() {
+  questionNumber = 0;
+  
+  //Start Timer Countdown
+  timeScore = 100
+  timerEl.textContent = "Timer " + timeScore
+  startTimer = setInterval(runTime, 1000);
+  
+  // Randomize question array
+  shuffle(QUIZ_ARRAY);
+  
+  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+}
+/* End Utility Functions*/
+
+/* Start Main Content Display Area Functions */
+
+// HIGH SCORES PAGE
 let createHighScoresPage = function() {
   
   // Clear mainContent
-  clearMainContent();
+  clearDisplayArea();
   
   let highScoresPage = document.createElement("div");
   
@@ -143,7 +213,7 @@ let createHighScoresPage = function() {
   }
   
   let highScoresHomeButton = document.createElement("button");
-  highScoresHomeButton.textContent = "Take the Quiz Again";
+  highScoresHomeButton.textContent = "Back to the Starting Page";
   highScoresHomeButton.addEventListener("click", function() {createStartPage()});
   
   let highScoresClearButton = document.createElement("button");
@@ -168,36 +238,18 @@ let createHighScoresPage = function() {
   mainContent.appendChild(highScoresPage);
 }
 
-// Add new score to localStorage
-let updateHighScores = function(initialsInput, score) {
-  
-  // Pull and parse scores saved in local storage
-  if (localStorage.getItem("codingQuizHighScores")){
-    highScores = JSON.parse(localStorage.getItem("codingQuizHighScores"));
-  }
-  
-  let newScore = {"initials": initialsInput, "score": score};
-  
-  highScores.push(newScore);
-  
-  highScores.sort((a, b) => parseInt(b.score) - parseInt(a.score));
-  
-  while (highScores.length > 10) {
-    highScores.pop();
-  }
-  
-  localStorage.setItem("codingQuizHighScores", JSON.stringify(highScores))
-}
-
-
-// Fill main section with quiz results
+// QUIZ RESULTS PAGE
 let createResultsPage = function() {
   // Clear mainContent
-  clearMainContent();
+  clearDisplayArea();
   
   // Stop and hide
   clearInterval(startTimer)
   timerEl.textContent = "";
+  
+  if (timeScore < 0) {
+    timeScore = 0
+  };
   
   
   // create page elements
@@ -207,7 +259,7 @@ let createResultsPage = function() {
   resultsH1.textContent = "All done!";
   
   let resultsH2 = document.createElement("h2");
-  resultsH2.textContent = "Your final score is " + score + ".";
+  resultsH2.textContent = "Your final score is " + timeScore + ".";
   
   let inputLabel = document.createElement("label");
   inputLabel.setAttribute("id", "input-label");
@@ -217,7 +269,7 @@ let createResultsPage = function() {
   initialsInput.setAttribute("id", "initials-input")
   
   let inputButton = document.createElement("button");
-  inputButton.addEventListener("click", function() {updateHighScores(initialsInput.value, score); createHighScoresPage()});
+  inputButton.addEventListener("click", function() {updateHighScores(initialsInput.value, timeScore); createHighScoresPage()});
   
   resultsPage.appendChild(resultsH1);
   resultsPage.appendChild(resultsH2);
@@ -229,12 +281,12 @@ let createResultsPage = function() {
   mainContent.appendChild(resultsPage);
 }
 
-// Fill main section with next question in array
+// QUESTION PAGE
 let createQuestionPage = function (questionObject) {
   
   // Check if there is a question left in the array
   // if not, show results
-  if (questionNumber >= 10 || timer <= 0 || !questionObject) {
+  if (questionNumber >= 10 || timeScore <= 0 || !questionObject) {
     createResultsPage();
   }
   
@@ -242,7 +294,7 @@ let createQuestionPage = function (questionObject) {
   else {
     
     // Clear mainContent
-    clearMainContent();    
+    clearDisplayArea();    
     
     let questionPage = document.createElement("div");
     
@@ -260,7 +312,8 @@ let createQuestionPage = function (questionObject) {
       answerButton.textContent = answerList[i].text;
       
       answerButton.addEventListener("click", function () {
-        answer(answerList[i].isCorrect)});
+        answer(answerList[i].isCorrect)
+      });
       
       questionPage.appendChild(answerButton);
     }
@@ -270,53 +323,10 @@ let createQuestionPage = function (questionObject) {
   }
 }
 
-// Timer functionality
-let runTime = function () {
-  timer--;
-  timerEl.textContent = "Timer " + timer
-
-  if (timer <= 0) {
-    clearInterval(runTime);
-    createResultsPage()
-  }
-}
-
-// Array shuffler from https://javascript.info/task/shuffle
-function shuffle(array) {
-  // debugger;
-  for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
-    
-    // swap elements array[i] and array[j]
-    // we use "destructuring assignment" syntax to achieve that
-    // you'll find more details about that syntax in later chapters
-    // same can be written as:
-    // let t = array[i]; array[i] = array[j]; array[j] = t
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-// Begins the quiz
-let runQuiz = function() {
-  questionNumber = 0;
-  
-  //Start Timer Countdown
-  timer = 100
-  timerEl.textContent = "Timer " + timer
-  startTimer = setInterval(runTime, 1000);
-  
-  // Randomize question array
-  shuffle(QUIZ_ARRAY);
-  
-  createQuestionPage(QUIZ_ARRAY[questionNumber]);
-}
-
-// Fill the main section with the welcome and start quiz section
+// STARTING PAGE
 let createStartPage = function () {
-  // Clear mainContent
-  clearMainContent();
-  
-  
+  // Clear display area
+  clearDisplayArea();
   
   let startPage = document.createElement("div");
   
@@ -330,11 +340,27 @@ let createStartPage = function () {
   startButton.textContent = "Start Quiz"
   startButton.addEventListener("click", runQuiz);
   
+  let highScoreButton = document.createElement("button");
+  highScoreButton.textContent = "View High Scores"
+  highScoreButton.addEventListener("click", function() {
+    createHighScoresPage()
+  });
+  
+  
   startPage.appendChild(startH1);
   startPage.appendChild(startH2);
   startPage.appendChild(startButton);
+  startPage.appendChild(highScoreButton);
   
   mainContent.appendChild(startPage);
+  
+  // Pull and parse scores if in localStorage
+  if (localStorage.getItem("codingQuizHighScores")){
+    highScores = JSON.parse(localStorage.getItem("codingQuizHighScores"));
+  }
 }
 
+/* End Main Content Display Functions */
+
+/* Initiate Quiz*/
 createStartPage();
