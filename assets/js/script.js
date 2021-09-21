@@ -1,37 +1,90 @@
 const QUIZ_ARRAY = [
   {
     question:"If you type the following code in the console window, what result will you get?\n3 > 2 > 1 === false;", 
-    answer: ["true", "false"]
+    answer: [
+      {"text": "True","isCorrect": "Correct!"}, 
+      {"text": "False","isCorrect": "Incorrect!"}
+    ]
   }, {
     question: "JavaScript is a _____-side programming language.", 
-    answer: ["Both","Client","Server", "None"]
-    },{
-      question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
-      answer: ["alert('Hello Sunshine!');", "alertBox('Hello Sunshine!');", "alert(Hello Sunshine!);", "msgAlert('Hello Sunshine!');"]
-    },{
-      question: "How do you find the minimum of x and y using JavaScript?",
-      answer: ["Math.min(x,y)", "min(x,y);", "Math.min(xy)", "min(xy);"]
-    },{
-      question: "Which of the following statements will throw an error?",
-      answer: ["var fun = function bar{ }", "var fun = function bar( ){ }", "function fun( ){ }"]
-    },{
-      question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
-      answer: ["Divisible by 10", "ReferenceError", "Not divisible by 10", "None of the above"]
-    },{
-      question: "Which JavaScript label catches all the values, except for the ones specified?",
-      answer: ["default", "catch", "label", "try"]
-    },{
-      question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
-      answer: ["if(x == 2)", "if(x 2)", "if(x = 2)", "if(x != 2 )"]
-    },{
-      question: "What will the code return?\nBoolean(3 < 7)",
-      answer: ["true", "false", "NaN", "SyntaxError"]
-    },{
-      question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
-      answer: ["TypeError", "ReferenceError", "undefined", "1"]
-    },{
-      question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
-      answer: ["document.getElementById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;", "document.getElementById(test).innerHTML = “Hello Sunshine!”;", "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;"]
+    answer: [
+      {"text": "Both","correct": "Correct!"}, 
+      {"text": "Client","isCorrect": "Incorrect!"}, 
+      {"text": "Server","isCorrect": "Incorrect!"}, 
+      {"text": "None","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
+    answer: [
+      {"text": "alert('Hello Sunshine!');","correct": "Correct!"}, 
+      {"text": "alertBox('Hello Sunshine!');","isCorrect": "Incorrect!"}, 
+      {"text": "alert(Hello Sunshine!);","isCorrect": "Incorrect!"}, 
+      {"text": "msgAlert('Hello Sunshine!');","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "How do you find the minimum of x and y using JavaScript?",
+    answer: [
+      {"text": "Math.min(x,y)","correct": "Correct!"}, 
+      {"text": "min(x,y);","isCorrect": "Incorrect!"}, 
+      {"text": "Math.min(xy)","isCorrect": "Incorrect!"}, 
+      {"text": "min(xy);","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "Which of the following statements will throw an error?",
+    answer: 
+    [
+      {"text": "var fun = function bar{ }","correct": "Correct!"}, 
+      {"text": "var fun = function bar( ){ }","isCorrect": "Incorrect!"}, 
+      {"text": "function fun( ){ }","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
+    answer: [
+      {"text": "Divisible by 10","correct": "Correct!"}, 
+      {"text": "ReferenceError","isCorrect": "Incorrect!"}, 
+      {"text": "Not divisible by 10","isCorrect": "Incorrect!"}, 
+      {"text": "None of the above","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "Which JavaScript label catches all the values, except for the ones specified?",
+    answer: [
+      {"text": "default","correct": "Correct!"}, 
+      {"text": "catch","isCorrect": "Incorrect!"}, 
+      {"text": "label","isCorrect": "Incorrect!"}, 
+      {"text": "try","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
+    answer: [
+      {"text": "if(x == 2)","correct": "Correct!"}, 
+      {"text": "if(x 2)","isCorrect": "Incorrect!"}, 
+      {"text": "if(x = 2)","isCorrect": "Incorrect!"}, 
+      {"text": "if(x != 2 )","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "What will the code return?\nBoolean(3 < 7)",
+    answer: [
+      {"text": "true","correct": "Correct!"}, 
+      {"text": "false","isCorrect": "Incorrect!"}, 
+      {"text": "NaN","isCorrect": "Incorrect!"}, 
+      {"text": "SyntaxError","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
+    answer: [
+      {"text": "TypeError","correct": "Correct!"}, 
+      {"text": "ReferenceError","isCorrect": "Incorrect!"}, 
+      {"text": "undefined","isCorrect": "Incorrect!"}, 
+      {"text": "1","isCorrect": "Incorrect!"}
+    ]
+  },{
+    question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
+    answer: [
+      {"text": "document.getElementById(“test”).innerHTML = “Hello Sunshine!”;","correct": "Correct!"}, 
+      {"text": "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;","isCorrect": "Incorrect!"}, 
+      {"text": "document.getElementById(test).innerHTML = “Hello Sunshine!”;","isCorrect": "Incorrect!"}, 
+      {"text": "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;","isCorrect": "Incorrect!"}
+    ]
   }
 ];
 
@@ -73,25 +126,25 @@ let createHighScoresPage = function() {
   
   let highScoresH1 = document.createElement("h1");
   highScoresH1.textContent = "Top 10 High Scores"
-
+  
   let highScoresList = document.createElement("ol");
   for (let i = 0; i < highScores.length; i++) {
     let highScoresListItem = document.createElement("li");
     highScoresListItem.textContent = highScores[i].initials + " - " + highScores[i].score;
-
+    
     highScoresList.appendChild(highScoresListItem);
-
+    
   }
-
+  
   let highScoresHomeButton = document.createElement("button");
   highScoresHomeButton.textContent = "Take the Quiz Again";
   highScoresHomeButton.addEventListener("click", function() {createStartPage()});
-
+  
   let highScoresClearButton = document.createElement("button");
   highScoresClearButton.textContent = "Reset the High Scores";
   highScoresClearButton.addEventListener("click", function() {
     if (highScores.length){
-
+      
       let clearScores = confirm("Are you sure you want to clear the scores?");
       if (clearScores){
         localStorage.setItem("codingQuizHighScores", "");
@@ -100,33 +153,33 @@ let createHighScoresPage = function() {
       }
     }
   })
-
+  
   highScoresPage.appendChild(highScoresH1);
   highScoresPage.appendChild(highScoresList);
   highScoresPage.appendChild(highScoresHomeButton);
   highScoresPage.appendChild(highScoresClearButton);
-
+  
   mainContent.appendChild(highScoresPage);
 }
 
 // Add new score to localStorage
 let updateHighScores = function(initialsInput, score) {
-
+  
   // Pull and parse scores saved in local storage
   if (localStorage.getItem("codingQuizHighScores")){
     highScores = JSON.parse(localStorage.getItem("codingQuizHighScores"));
   }
-
+  
   let newScore = {"initials": initialsInput, "score": score};
-
+  
   highScores.push(newScore);
   
   highScores.sort((a, b) => parseInt(b.score) - parseInt(a.score));
-
+  
   while (highScores.length > 10) {
     highScores.pop();
   }
-
+  
   localStorage.setItem("codingQuizHighScores", JSON.stringify(highScores))
 }
 
@@ -140,7 +193,7 @@ let createResultsPage = function() {
   clearInterval(startTimer)
   timerEl.textContent = "";
   
-
+  
   // create page elements
   let resultsPage = document.createElement("div");
   
@@ -191,18 +244,18 @@ let createQuestionPage = function (questionObject) {
     questionText.innerHTML = "<pre>" + questionObject.question + "</pre>";
     
     questionPage.appendChild(questionText);
-
+    
     // shuffle answer order
     let baseAnswers = questionObject.answer;
     let shuffledAnswers = baseAnswers;
     shuffle(shuffledAnswers)
     console.dir(baseAnswers);
     console.dir(shuffledAnswers);
-
+    
     for (let i = 0; i < shuffledAnswers.length; i++) {
       let answerButton = document.createElement("button");
       answerButton.textContent = shuffledAnswers[i];
-
+      
       answerButton.addEventListener("click", function () {
         if (answerButton.textContent === baseAnswers[0]){
           answer("Correct!");
@@ -231,7 +284,7 @@ function shuffle(array) {
   shuffledArray = array;
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
-
+    
     // swap elements array[i] and array[j]
     // we use "destructuring assignment" syntax to achieve that
     // you'll find more details about that syntax in later chapters
@@ -245,12 +298,12 @@ function shuffle(array) {
 // Begins the quiz
 let runQuiz = function() {
   questionNumber = 0;
-
+  
   //Start Timer Countdown
   timer = 100
   timerEl.textContent = "Timer " + timer
   startTimer = setInterval(runTime, 1000);
-
+  
   // Randomize question array
   let randomizedQuestions = shuffle(QUIZ_ARRAY);
   
@@ -261,9 +314,9 @@ let runQuiz = function() {
 let createStartPage = function () {
   // Clear mainContent
   clearMainContent();
-
   
-    
+  
+  
   let startPage = document.createElement("div");
   
   let startH1 = document.createElement("h1");
