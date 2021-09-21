@@ -42,7 +42,7 @@ let timer, score, questionNumber = 0;
 let highScores = [];
 // let score = 0;
 // let questionNumber = 0 ;
-// let startTimer;
+let startTimer;
 
 // Clear mainContent
 let clearMainContent = function () {
@@ -53,7 +53,7 @@ let clearMainContent = function () {
 
 // Answer handler
 let answer = function (result) {
-  if (result === "incorrect") {
+  if (result === "Incorrect!") {
     timer = timer - 10;
   }
   score = timer;
@@ -70,17 +70,63 @@ let createHighScoresPage = function() {
   
   let highScoresPage = document.createElement("div");
   
-  
-  
+  let highScoresH1 = document.createElement("h1");
+  highScoresH1.textContent = "Top 10 High Scores"
+
+  let highScoresList = document.createElement("ol");
+  for (let i = 0; i < highScores.length; i++) {
+    let highScoresListItem = document.createElement("li");
+    highScoresListItem.textContent = highScores[i].initials + " - " + highScores[i].score;
+
+    highScoresList.appendChild(highScoresListItem);
+
+  }
+
+  let highScoresHomeButton = document.createElement("button");
+  highScoresHomeButton.textContent = "Take the Quiz Again";
+  highScoresHomeButton.addEventListener("click", function() {createStartPage()});
+
+  let highScoresClearButton = document.createElement("button");
+  highScoresClearButton.textContent = "Reset the High Scores";
+  highScoresClearButton.addEventListener("click", function() {
+    if (highScores.length){
+
+      let clearScores = confirm("Are you sure you want to clear the scores?");
+      if (clearScores){
+        localStorage.setItem("codingQuizHighScores", "");
+        highScores = [];
+        createHighScoresPage();
+      }
+    }
+  })
+
+  highScoresPage.appendChild(highScoresH1);
+  highScoresPage.appendChild(highScoresList);
+  highScoresPage.appendChild(highScoresHomeButton);
+  highScoresPage.appendChild(highScoresClearButton);
+
   mainContent.appendChild(highScoresPage);
 }
 
 // Add new score to localStorage
 let updateHighScores = function(initialsInput, score) {
+
+  // Pull and parse scores saved in local storage
+  if (localStorage.getItem("codingQuizHighScores")){
+    highScores = JSON.parse(localStorage.getItem("codingQuizHighScores"));
+  }
+
   let newScore = {"initials": initialsInput, "score": score};
+
   highScores.push(newScore);
   
-  highScores.sort((a, b) => parseInt(a.score) - parseInt(b.score));
+  highScores.sort((a, b) => parseInt(b.score) - parseInt(a.score));
+
+  while (highScores.length > 10) {
+    highScores.pop();
+  }
+
+  localStorage.setItem("codingQuizHighScores", JSON.stringify(highScores))
 }
 
 
@@ -93,6 +139,7 @@ let createResultsPage = function() {
   clearInterval(startTimer)
   timerEl.textContent = "";
   
+
   // create page elements
   let resultsPage = document.createElement("div");
   
@@ -110,7 +157,7 @@ let createResultsPage = function() {
   initialsInput.setAttribute("id", "initials-input")
   
   let inputButton = document.createElement("button");
-  inputButton.addEventListener("click", function() {updateHighScores(initialsInput, score); createHighScoresPage()});
+  inputButton.addEventListener("click", function() {updateHighScores(initialsInput.value, score); createHighScoresPage()});
   
   resultsPage.appendChild(resultsH1);
   resultsPage.appendChild(resultsH2);
@@ -182,10 +229,9 @@ let runQuiz = function() {
 let createStartPage = function () {
   // Clear mainContent
   clearMainContent();
-  if (localStorage.getItem("highScores")){
-    highScores = localStorage.getItem("highScores");
-  }
-  
+
+  questionNumber = 0;
+    
   let startPage = document.createElement("div");
   
   let startH1 = document.createElement("h1");
