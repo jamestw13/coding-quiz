@@ -28,4 +28,5 @@ The purpose of this project is to create a timed quiz on JavaScript fundamentals
 ### [Click here to go to the live deployment](https://jamestw13.github.io/coding-quiz/)
 
 TODO:
-![Screenshot](https://github.com/jamestw13/jamestw13.github.io/blob/main/coding-quiz-screenshot.png)
+![Screenshot](https://github.com/jamestw13/coding-quiz/blob/main/coding-quiz-screenshot.png)
+
