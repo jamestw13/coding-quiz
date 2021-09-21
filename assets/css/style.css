@@ -1,24 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
+  flex-direction: column;
   background-color: lightgray;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+header {
+  background-color: white;
+  left: 50%;
+  font-weight: bold;
+  padding: 30px;
+  margin: 15px 10%;
+  border-radius: 5px;
+  font-size: 48px;
+  text-align: center;
+}
 h1 {
   font-size: 36px;
+  padding: 10px;
 }
 
 h2 {
-  font-size: 18px
+  font-size: 24px;
+  padding: 5px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+h3 {
+  font-size: 20px;
+  padding: 10px;
 }
 
 button {
   color: white;
   background-color: blueviolet;
+  font-size: 20px;
   border: none;
   border-radius: 5px;
-  padding: 10px;
-  margin: 10px;
-  
+  padding: 8px 12px;
+  margin: 5px;
+}
+
+button:hover, button:focus {
+  background-color: mediumorchid;
+}
+
+input {
+  background-color: white;
+  font-size: 24px;
+  text-align: center;
+  border-radius: 5px;
+  text-transform: uppercase;
+  max-width: 100px;
+  padding: 5px
+}
+
+ol {
+  margin: 10px 50px;
+  max-width: 20%;
+  font-size: 24px;
+}
+
+li {
+  text-transform: uppercase;
+  background-color: mediumorchid;
+  margin: 2px;
+  text-align: center;
+  border-radius: 5px;
+  color: white;
+  border: 4px solid blueviolet;
 }
 
 #timer {
@@ -31,8 +87,9 @@ button {
   border-radius: 5px;
 }
 
-#page-content {
+#page-content { 
   background-color: white;
+  left: 50%;
   font-weight: bold;
   padding: 30px;
   margin: 15px 10%;
@@ -47,4 +104,16 @@ button {
   padding: 10px;
   margin: 15px 30%;
   border-radius: 5px;
+}
+
+#answer-button-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+#initialsInput {
+  display: flex;
+  align-items: center;
 }
