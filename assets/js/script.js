@@ -8,7 +8,7 @@ const QUIZ_ARRAY = [
   }, {
     question: "JavaScript is a _____-side programming language.", 
     answer: [
-      {"text": "Both","correct": "Correct!"}, 
+      {"text": "Both","isCorrect": "Correct!"}, 
       {"text": "Client","isCorrect": "Incorrect!"}, 
       {"text": "Server","isCorrect": "Incorrect!"}, 
       {"text": "None","isCorrect": "Incorrect!"}
@@ -16,7 +16,7 @@ const QUIZ_ARRAY = [
   },{
     question: "Which of the following will write the message 'Hello Sunshine!' in an alert box?",
     answer: [
-      {"text": "alert('Hello Sunshine!');","correct": "Correct!"}, 
+      {"text": "alert('Hello Sunshine!');","isCorrect": "Correct!"}, 
       {"text": "alertBox('Hello Sunshine!');","isCorrect": "Incorrect!"}, 
       {"text": "alert(Hello Sunshine!);","isCorrect": "Incorrect!"}, 
       {"text": "msgAlert('Hello Sunshine!');","isCorrect": "Incorrect!"}
@@ -24,7 +24,7 @@ const QUIZ_ARRAY = [
   },{
     question: "How do you find the minimum of x and y using JavaScript?",
     answer: [
-      {"text": "Math.min(x,y)","correct": "Correct!"}, 
+      {"text": "Math.min(x,y)","isCorrect": "Correct!"}, 
       {"text": "min(x,y);","isCorrect": "Incorrect!"}, 
       {"text": "Math.min(xy)","isCorrect": "Incorrect!"}, 
       {"text": "min(xy);","isCorrect": "Incorrect!"}
@@ -33,14 +33,14 @@ const QUIZ_ARRAY = [
     question: "Which of the following statements will throw an error?",
     answer: 
     [
-      {"text": "var fun = function bar{ }","correct": "Correct!"}, 
+      {"text": "var fun = function bar{ }","isCorrect": "Correct!"}, 
       {"text": "var fun = function bar( ){ }","isCorrect": "Incorrect!"}, 
       {"text": "function fun( ){ }","isCorrect": "Incorrect!"}
     ]
   },{
     question: "If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
     answer: [
-      {"text": "Divisible by 10","correct": "Correct!"}, 
+      {"text": "Divisible by 10","isCorrect": "Correct!"}, 
       {"text": "ReferenceError","isCorrect": "Incorrect!"}, 
       {"text": "Not divisible by 10","isCorrect": "Incorrect!"}, 
       {"text": "None of the above","isCorrect": "Incorrect!"}
@@ -48,7 +48,7 @@ const QUIZ_ARRAY = [
   },{
     question: "Which JavaScript label catches all the values, except for the ones specified?",
     answer: [
-      {"text": "default","correct": "Correct!"}, 
+      {"text": "default","isCorrect": "Correct!"}, 
       {"text": "catch","isCorrect": "Incorrect!"}, 
       {"text": "label","isCorrect": "Incorrect!"}, 
       {"text": "try","isCorrect": "Incorrect!"}
@@ -56,7 +56,7 @@ const QUIZ_ARRAY = [
   },{
     question: "Which are the correct 'if' statements to execute certain code if 'x' is equal to 2?",
     answer: [
-      {"text": "if(x == 2)","correct": "Correct!"}, 
+      {"text": "if(x == 2)","isCorrect": "Correct!"}, 
       {"text": "if(x 2)","isCorrect": "Incorrect!"}, 
       {"text": "if(x = 2)","isCorrect": "Incorrect!"}, 
       {"text": "if(x != 2 )","isCorrect": "Incorrect!"}
@@ -64,7 +64,7 @@ const QUIZ_ARRAY = [
   },{
     question: "What will the code return?\nBoolean(3 < 7)",
     answer: [
-      {"text": "true","correct": "Correct!"}, 
+      {"text": "true","isCorrect": "Correct!"}, 
       {"text": "false","isCorrect": "Incorrect!"}, 
       {"text": "NaN","isCorrect": "Incorrect!"}, 
       {"text": "SyntaxError","isCorrect": "Incorrect!"}
@@ -72,7 +72,7 @@ const QUIZ_ARRAY = [
   },{
     question: "What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n\t++x;\n\tthis.x = x;\n\treturn x;\n}\nvar bar = new new fun;\nconsole.log(bar.x);",
     answer: [
-      {"text": "TypeError","correct": "Correct!"}, 
+      {"text": "TypeError","isCorrect": "Correct!"}, 
       {"text": "ReferenceError","isCorrect": "Incorrect!"}, 
       {"text": "undefined","isCorrect": "Incorrect!"}, 
       {"text": "1","isCorrect": "Incorrect!"}
@@ -80,7 +80,7 @@ const QUIZ_ARRAY = [
   },{
     question: "Which is the correct JavaScript syntax to change the HTML content given below?\n<p id=”test”>Hello World!</p>",
     answer: [
-      {"text": "document.getElementById(“test”).innerHTML = “Hello Sunshine!”;","correct": "Correct!"}, 
+      {"text": "document.getElementById(“test”).innerHTML = “Hello Sunshine!”;","isCorrect": "Correct!"}, 
       {"text": "document.getElementsById(“test”).innerHTML = “Hello Sunshine!”;","isCorrect": "Incorrect!"}, 
       {"text": "document.getElementById(test).innerHTML = “Hello Sunshine!”;","isCorrect": "Incorrect!"}, 
       {"text": "document.getElementByTagName(“p”)[0].innerHTML = “Hello Sunshine!”;","isCorrect": "Incorrect!"}
@@ -106,12 +106,18 @@ let clearMainContent = function () {
 
 // Answer handler
 let answer = function (result) {
+  
   if (result === "Incorrect!") {
     timer = timer - 10;
   }
   score = timer;
   footer.innerHTML = result
   setTimeout( () => {footer.innerHTML = ""},   1000);
+
+  if (timer <= 0) {
+    createResultsPage();
+  }
+
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 
@@ -228,7 +234,7 @@ let createQuestionPage = function (questionObject) {
   
   // Check if there is a question left in the array
   // if not, show results
-  if (!questionObject || timer === 0) {
+  if (questionNumber >= 10 || timer <= 0 || !questionObject) {
     createResultsPage();
   }
   
@@ -245,24 +251,16 @@ let createQuestionPage = function (questionObject) {
     
     questionPage.appendChild(questionText);
     
+    let answerList = questionObject.answer;
     // shuffle answer order
-    let baseAnswers = questionObject.answer;
-    let shuffledAnswers = baseAnswers;
-    shuffle(shuffledAnswers)
-    console.dir(baseAnswers);
-    console.dir(shuffledAnswers);
+    shuffle(answerList);
     
-    for (let i = 0; i < shuffledAnswers.length; i++) {
+    for (let i = 0; i < answerList.length; i++) {
       let answerButton = document.createElement("button");
-      answerButton.textContent = shuffledAnswers[i];
+      answerButton.textContent = answerList[i].text;
       
       answerButton.addEventListener("click", function () {
-        if (answerButton.textContent === baseAnswers[0]){
-          answer("Correct!");
-        } else {
-          answer("Incorrect!");
-        }
-      });
+        answer(answerList[i].isCorrect)});
       
       questionPage.appendChild(answerButton);
     }
@@ -276,13 +274,17 @@ let createQuestionPage = function (questionObject) {
 let runTime = function () {
   timer--;
   timerEl.textContent = "Timer " + timer
+
+  if (timer <= 0) {
+    clearInterval(runTime);
+    createResultsPage()
+  }
 }
 
 // Array shuffler from https://javascript.info/task/shuffle
 function shuffle(array) {
   // debugger;
-  shuffledArray = array;
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
+  for (let i = array.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
     
     // swap elements array[i] and array[j]
@@ -290,9 +292,8 @@ function shuffle(array) {
     // you'll find more details about that syntax in later chapters
     // same can be written as:
     // let t = array[i]; array[i] = array[j]; array[j] = t
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    [array[i], array[j]] = [array[j], array[i]];
   }
-  return shuffledArray;
 }
 
 // Begins the quiz
@@ -305,9 +306,9 @@ let runQuiz = function() {
   startTimer = setInterval(runTime, 1000);
   
   // Randomize question array
-  let randomizedQuestions = shuffle(QUIZ_ARRAY);
+  shuffle(QUIZ_ARRAY);
   
-  createQuestionPage(randomizedQuestions[questionNumber]);
+  createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 
 // Fill the main section with the welcome and start quiz section
