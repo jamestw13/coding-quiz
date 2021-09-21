@@ -119,52 +119,6 @@ let clearDisplayArea = function () {
   }
 }
 
-// Clear High Scores
-let clearHighScoresHandler = function() {
-  if (highScores.length){
-    
-    let clearScores = confirm("Are you sure you want to clear the scores?");
-    if (clearScores){
-      localStorage.setItem("codingQuizHighScores", "");
-      highScores = [];
-      createHighScoresPage();
-    }
-  }
-}
-
-// Submit High Score
-let initialsInputHandler = function(initials, score) {
-  // check that initials were entered
-  if (initials.length <= 0){
-    alert("Please enter your initials.")
-  } else {
-    updateHighScores(initials, score); 
-    createHighScoresPage();
-  }
-}
-
-// Answer handler
-let answer = function (result) {
-  // Reset timer (no overlap between questions)
-  clearTimeout(resultTimer);
-  
-  // Time penalty for wrong answer
-  if (result === "Incorrect!") {
-    timeScore = timeScore - 10;
-  }
-  
-  // Show notification
-  resultEl.innerHTML = result
-  resultTimer = setTimeout( () => {resultEl.innerHTML = ""},   1000);
-  
-  // Finish quiz if out of time
-  if (timeScore <= 0) {
-    createResultsPage();
-  }
-  // Next Question
-  createQuestionPage(QUIZ_ARRAY[questionNumber]);
-}
-
 // Add new score to localStorage
 let updateHighScores = function(initialsInput, score) {
   // Create object
@@ -220,6 +174,55 @@ let runQuiz = function() {
   createQuestionPage(QUIZ_ARRAY[questionNumber]);
 }
 /* End Utility Functions*/
+
+/* Start Handler Functions */
+
+// Clear High Scores
+let clearHighScoresHandler = function() {
+  if (highScores.length){
+    
+    let clearScores = confirm("Are you sure you want to clear the scores?");
+    if (clearScores){
+      localStorage.setItem("codingQuizHighScores", "");
+      highScores = [];
+      createHighScoresPage();
+    }
+  }
+}
+
+// Submit High Score
+let initialsInputHandler = function(initials, score) {
+  // check that initials were entered
+  if (initials.length <= 0){
+    alert("Please enter your initials.")
+  } else {
+    updateHighScores(initials, score); 
+    createHighScoresPage();
+  }
+}
+
+// Answer handler
+let answerHandler = function (result) {
+  // Reset timer (no overlap between questions)
+  clearTimeout(resultTimer);
+  
+  // Time penalty for wrong answer
+  if (result === "Incorrect!") {
+    timeScore = timeScore - 10;
+  }
+  
+  // Show notification
+  resultEl.innerHTML = result
+  resultTimer = setTimeout( () => {resultEl.innerHTML = ""},   1000);
+  
+  // Finish quiz if out of time
+  if (timeScore <= 0) {
+    createResultsPage();
+  }
+  // Next Question
+  createQuestionPage(QUIZ_ARRAY[questionNumber]);
+}
+/* End Handler Functions*/
 
 /* Start Main Content Display Area Functions */
 
@@ -340,9 +343,7 @@ let createQuestionPage = function (questionObject) {
     for (let i = 0; i < answerList.length; i++) {
       let answerButton = document.createElement("button");
       answerButton.innerHTML = "<code>" + answerList[i].text + "</code>";
-      answerButton.addEventListener("click", function () {
-        answer(answerList[i].isCorrect)
-      });
+      answerButton.addEventListener("click", function () {answerHandler(answerList[i].isCorrect)});
       
       answerButtonDiv.appendChild(answerButton);
     }
