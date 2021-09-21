@@ -103,7 +103,7 @@ let timerEl = document.getElementById("timer");
 let resultEl = document.getElementById("answer-result");
 let timeScore, questionNumber = 0;
 let highScores = [];
-let startTimer;
+let startTimer, resultTimer;
 
 /* End Global Variables */
 
@@ -118,13 +118,14 @@ let clearDisplayArea = function () {
 
 // Answer handler
 let answer = function (result) {
+  clearTimeout(resultTimer);
   
   if (result === "Incorrect!") {
     timeScore = timeScore - 10;
   }
   
   resultEl.innerHTML = result
-  setTimeout( () => {resultEl.innerHTML = ""},   1000);
+  resultTimer = setTimeout( () => {resultEl.innerHTML = ""},   1000);
   
   if (timeScore <= 0) {
     createResultsPage();
@@ -269,6 +270,7 @@ let createResultsPage = function() {
   initialsInput.setAttribute("id", "initials-input")
   
   let inputButton = document.createElement("button");
+  inputButton.textContent = "Submit";
   inputButton.addEventListener("click", function() {updateHighScores(initialsInput.value, timeScore); createHighScoresPage()});
   
   resultsPage.appendChild(resultsH1);
@@ -297,7 +299,7 @@ let createQuestionPage = function (questionObject) {
     clearDisplayArea();    
     
     let questionPage = document.createElement("div");
-    
+
     let questionText = document.createElement("h2");
     questionText.innerHTML = "<pre>" + questionObject.question + "</pre>";
     
